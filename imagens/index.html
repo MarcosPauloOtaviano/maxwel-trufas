@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trufas e Cones do Robertão 🍫</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header id="topo">Trufas do Robertão 🍫</header>
+
+<div class="container">
+    <div class="promo">
+        <b>🔥 PROMOÇÕES DO DIA:</b><br>
+        🍬 <b>Tradicionais:</b> 3 por <b>R$ 12,00</b><br>
+        💎 <b>Especiais/Cones:</b> 3 por <b>R$ 21,00</b><br>
+        
+    </div>
+
+    <div class="nav-categories">
+        <a href="#tradicionais">🍬 Tradicionais</a>
+        <a href="#especiais">💎 Especiais</a>
+        <a href="#cones">🍦 Cones</a>
+    </div>
+
+    <h2 id="tradicionais">🍬 Trufas Tradicionais</h2>
+    <div class="grid" id="gridTradicionais"></div>
+
+    <h2 id="especiais">💎 Trufas Especiais</h2>
+    <div class="grid" id="gridEspeciais"></div>
+
+    <h2 id="cones">🍦 Cones Recheados</h2>
+    <div class="grid" id="gridCones"></div>
+</div>
+
+<div id="cartBtn" onclick="toggleCart()">
+    <span>🛒</span> 
+    <span>Carrinho (<span id='cartCount'>0</span>)</span>
+</div>
+
+<div id="cartBox">
+    <span class="close-cart" onclick="toggleCart()">×</span>
+    <h3 style="margin-top:0;">Seu Pedido</h3>
+    
+    <div id="cartItemsWrapper">
+        <div id="cartItems"></div>
+    </div>
+    
+    <div id="discountDisplay" class="discount-text"></div>
+    <div class="total">Total: R$ <span id="totalPrice">0.00</span></div>
+    
+    <input type="text" id="clienteNome" placeholder="Seu Nome" style="width:90%; padding:8px; margin:10px 0; border:1px solid #ccc; border-radius:5px;">
+
+    <button onclick="checkoutWhatsApp()" style="background:#25D366;">Finalizar no WhatsApp 📲</button>
+    <button onclick="limparCarrinho()" style="background:#dc3545; margin-top:10px; font-size:12px; padding:8px;">Esvaziar Carrinho 🗑️</button>
+</div>
+
+<footer>
+    © Trufas do Robertão 2025 — Feito com ❤️<br>
+    <a href="https://wa.me/5535991546016" style="color:#666; text-decoration:none;">(35) 99154-6016</a>
+</footer>
+
+<script>
+const WHATSAPP_NUMBER = "5535991546016";
+
+// --- CONFIGURAÇÃO DAS IMAGENS ---
+// Certifique-se de que as imagens estão na mesma pasta que este arquivo index.html
+const tradicionais = [
+    { nome: "Trufa de Morango 🍓", preco: 5, desc: "Clássica e cremosa", img: "trufa-morango.jpg" },
+    { nome: "Trufa de Maracujá 💛", preco: 5, desc: "Azedinho doce", img: "trufa-maracuja.jpg" },
+    { nome: "Trufa de Ninho 🥛", preco: 5, desc: "Ninho cremoso", img: "trufa-ninho.jpg" },
+    { nome: "Trufa de Brigadeiro 🍫", preco: 5, desc: "Chocolate puro", img: "trufa-brigadeiro.jpg" },
+    { nome: "Trufa de Coco 🥥", preco: 5, desc: "Prestígio delicioso", img: "trufa-coco.jpg" }
+];
+
+const especiais = [
+    { nome: "Ninho com Morango 🍓", preco: 8, desc: "Combinação perfeita", img: "esp-ninho-morango.jpg" },
+    { nome: "Ninho com Maracujá 💛", preco: 8, desc: "Explosão de sabor", img: "esp-ninho-maracuja.jpg" },
+    { nome: "Brigadeiro c/ Morango 🍫", preco: 8, desc: "Sensação", img: "esp-brigadeiro-morango.jpg" },
+    { nome: "Oreo Especial 🍪", preco: 8, desc: "Branco, Oreo e Nutella", img: "esp-oreo.jpg" },
+    { nome: "Dueto 🌗", preco: 8, desc: "Dois amores", img: "esp-dueto.jpg" }
+];
+
+const cones = [
+    { nome: "Cone de Morango 🍦", preco: 8, desc: "Cone Trufado Crocante", img: "cone-morango.jpg" },
+    { nome: "Cone de Maracujá 🍦", preco: 8, desc: "Cone Trufado Crocante", img: "cone-maracuja.jpg" },
+    { nome: "Cone de Ninho 🍦", preco: 8, desc: "Cone Trufado Crocante", img: "cone-ninho.jpg" },
+    { nome: "Cone de Brigadeiro 🍦", preco: 8, desc: "Cone Trufado Crocante", img: "cone-brigadeiro.jpg" },
+    { nome: "Cone de Coco 🍦", preco: 8, desc: "Cone Trufado Crocante", img: "cone-coco.jpg" }
+];
+
+const todosProdutos = [...tradicionais, ...especiais, ...cones];
+let carrinho = [];
+
+if(localStorage.getItem('carrinhoRobertao')) {
+    try {
+        carrinho = JSON.parse(localStorage.getItem('carrinhoRobertao'));
+    } catch(e) {
+        localStorage.removeItem('carrinhoRobertao');
+    }
+}
+
+function renderCatalogo(){
+    const divTrad = document.getElementById("gridTradicionais");
+    const divEsp = document.getElementById("gridEspeciais");
+    const divCones = document.getElementById("gridCones");
+    
+    tradicionais.forEach((p, i) => { divTrad.innerHTML += criarCard(p, i); });
+    especiais.forEach((p, i) => { divEsp.innerHTML += criarCard(p, i + tradicionais.length); });
+    cones.forEach((p, i) => { divCones.innerHTML += criarCard(p, i + tradicionais.length + especiais.length); });
+    
+    updateCart();
+}
+
+function criarCard(p, index) {
+    return `
+        <div class='card'>
+            <div style="overflow:hidden; border-radius:15px 15px 0 0;">
+                <img src="${p.img}" class="card-img" alt="${p.nome}" 
+                onerror="this.src='https://placehold.co/300x200?text=Foto+Indisponível';">
+            </div>
+            <div class="card-body">
+                <div>
+                    <h3>${p.nome}</h3>
+                    <div class="desc">${p.desc}</div>
+                    <div class="price">R$ ${p.preco.toFixed(2)}</div>
+                </div>
+                <button onclick='addToCart(${index})'>+ Adicionar</button>
+            </div>
+        </div>
+    `;
+}
+
+function addToCart(index){
+    const produto = todosProdutos[index];
+    let item = carrinho.find(x => x.nome === produto.nome);
+    if (item) { item.qtd++; } else { carrinho.push({...produto, qtd: 1}); }
+    
+    updateCart();
+    
+    const btn = document.getElementById("cartBtn");
+    btn.style.transform = "scale(1.2)";
+    setTimeout(() => btn.style.transform = "scale(1)", 200);
+    
+    if(navigator.vibrate) navigator.vibrate(50);
+}
+
+function updateCart(){
+    const totalItens = carrinho.reduce((a, b) => a + b.qtd, 0);
+    document.getElementById("cartCount").innerText = totalItens;
+    
+    let itemsHTML = "";
+    let totalSemDesconto = 0;
+
+    carrinho.forEach((p, idx) => {
+        totalSemDesconto += p.preco * p.qtd;
+        itemsHTML += `
+            <div class='cart-item'>
+                <div class="cart-details">
+                    <b>${p.nome}</b><br>
+                    <small>R$${p.preco.toFixed(2)} cada</small>
+                </div>
+                <div>
+                    <input type='number' min='1' value='${p.qtd}' onchange='changeQty(${idx}, this.value)'>
+                </div>
+            </div>
+        `;
+    });
+
+    const qtd5 = carrinho.filter(p => p.preco === 5).reduce((acc, item) => acc + item.qtd, 0);
+    const desconto5 = Math.floor(qtd5 / 3) * 3.00;
+
+    const qtd8 = carrinho.filter(p => p.preco === 8).reduce((acc, item) => acc + item.qtd, 0);
+    const desconto8 = Math.floor(qtd8 / 3) * 3.00;
+
+    const totalDesconto = desconto5 + desconto8;
+    const totalFinal = totalSemDesconto - totalDesconto;
+
+    document.getElementById("cartItems").innerHTML = itemsHTML || "<p style='text-align:center;color:#999'>Seu carrinho está vazio.</p>";
+    document.getElementById("totalPrice").innerText = totalFinal.toFixed(2);
+    
+    if(totalDesconto > 0) {
+        document.getElementById("discountDisplay").innerHTML = `🎉 Economia: - R$ ${totalDesconto.toFixed(2)}`;
+    } else {
+        document.getElementById("discountDisplay").innerHTML = "";
+    }
+
+    localStorage.setItem('carrinhoRobertao', JSON.stringify(carrinho));
+}
+
+function changeQty(idx, val){ 
+    const newQty = parseInt(val);
+    if(isNaN(newQty) || newQty < 1) {
+        if(confirm("Remover item do carrinho?")) { carrinho.splice(idx, 1); }
+    } else { 
+        carrinho[idx].qtd = newQty; 
+    }
+    updateCart();
+}
+
+function toggleCart(){
+    const box = document.getElementById("cartBox");
+    box.style.display = (box.style.display === "flex" ? "none" : "flex");
+}
+
+function checkoutWhatsApp(){
+    if(carrinho.length === 0) return alert("Seu carrinho está vazio!");
+    
+    const nome = document.getElementById("clienteNome").value || "Cliente";
+    
+    let msg = `*OLÁ! PEDIDO DE ${nome.toUpperCase()}*%0A%0A`;
+    carrinho.forEach(p => { msg += `▪️ ${p.qtd}x ${p.nome}%0A`; });
+    
+    const total = document.getElementById("totalPrice").innerText;
+    const descontoTxt = document.getElementById("discountDisplay").innerText;
+    
+    msg += `%0A--------------------%0A`;
+    if(descontoTxt) { msg += `✅ Promoção aplicada!%0A`; }
+    msg += `💰 *TOTAL: R$ ${total}*%0A`;
+    msg += `%0A--------------------%0A`;
+    msg += `📍 *Aguardo a confirmação e chave PIX.*`;
+    
+    window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`, "_blank");
+}
+/*esvazia meu carrinho */ 
+function limparCarrinho() {
+    if (carrinho.length > 0 && confirm("Deseja realmente esvaziar o carrinho?")) {
+        carrinho = [];
+        updateCart();
+        toggleCart();
+    }
+}
+
+renderCatalogo();
+</script>
+
+</body>
+</html>
