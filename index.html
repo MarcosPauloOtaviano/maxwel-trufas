@@ -1,241 +1,342 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Trufas maxwell 🍫</title>
-<link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trufas Maxwell 🍫 – Doçura Artesanal Gourmet</title>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+    <style>
+        :root {
+            --chocolate-deep: #4d260a;
+            --chocolate: #8b4513;        /* Marrom Principal */
+            --gold: #f5bb3f;             /* Amarelo Ouro */
+            --gold-light: #fbe6c4;
+            --cream: #fffaf0;            /* Creme Suave de Fundo */
+            --text: #3e2723;
+            --success: #25D366;
+            --success-light: #e6ffed;
+            --pagbank-color: #00C04D;
+        }
+
+        body { font-family: 'Quicksand', sans-serif; background-color: var(--cream); color: var(--text); margin: 0; padding-bottom: 110px; }
+        
+        /* HEADER ESTILO GOURMET */
+        .header-container { background: white; box-shadow: 0 5px 25px rgba(0,0,0,0.06); border-bottom-left-radius: 35px; border-bottom-right-radius: 35px; overflow: hidden; margin-bottom: 25px; position: relative; }
+        .header-banner { width: 100%; height: 200px; background: linear-gradient(135deg, var(--chocolate-deep) 0%, var(--chocolate) 50%, var(--gold) 100%); background-size: cover; background-position: center; }
+        .header-content { padding: 0 25px 25px 25px; text-align: center; position: relative; background: white; margin-top: -25px; border-top-left-radius: 35px; border-top-right-radius: 35px; }
+        
+        .avatar-box { width: 120px; height: 120px; background-color: white; border-radius: 50%; margin: -65px auto 12px; border: 6px solid white; box-shadow: 0 8px 20px rgba(0,0,0,0.12); display: flex; align-items: center; justify-content: center; position: relative; z-index: 10; overflow: hidden; }
+        .avatar-box img { width: 100%; height: 100%; object-fit: cover; }
+        
+        .welcome-title { font-family: 'Caveat', cursive; font-size: 48px; color: var(--chocolate); margin: 0; line-height: 1; }
+        .welcome-text { font-size: 17px; line-height: 1.7; max-width: 600px; margin: 12px auto; color: #5d4037; }
+
+        /* ABAS MODERNA (ESTILO PÍLULA) */
+        .tabs-container { display: flex; justify-content: center; gap: 8px; margin-bottom: 25px; padding: 0 20px; }
+        .tab-btn { flex: 1; max-width: 160px; padding: 14px 8px; border: 2px solid transparent; border-radius: 30px; background: white; font-family: 'Quicksand', sans-serif; font-weight: bold; cursor: pointer; transition: 0.4s; font-size: 13px; color: #795548; box-shadow: 0 3px 6px rgba(0,0,0,0.03); }
+        .tab-btn:hover { background: #fdf5e6; }
+        .tab-btn.active { border-color: var(--gold); background: var(--gold); color: white; box-shadow: 0 6px 15px rgba(245, 187, 63, 0.4); }
+
+        /* GRID E CARDS PREMIUM */
+        .container { max-width: 900px; margin: 0 auto; padding: 0 20px; }
+        .promo-banner { background: #fdf5e6; border: 2px dashed var(--gold); color: var(--chocolate-deep); padding: 18px; border-radius: 20px; text-align: center; font-size: 15px; margin-bottom: 30px; font-weight: bold; }
+        
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 20px; }
+        .product-card { background: white; border-radius: 25px; border: 1px solid rgba(245, 187, 63, 0.1); overflow: hidden; box-shadow: 0 10px 20px rgba(0,0,0,0.04); display: flex; flex-direction: column; transition: transform 0.3s, box-shadow 0.3s; }
+        .product-card:hover { transform: translateY(-7px); box-shadow: 0 15px 30px rgba(0,0,0,0.08); }
+        
+        .product-img-container { height: 150px; background-color: #fdf2f2; position: relative; }
+        .product-img { width: 100%; height: 100%; object-fit: cover; }
+        
+        .product-info { padding: 18px; flex-grow: 1; display: flex; flex-direction: column; gap: 6px; }
+        .product-title { font-weight: 700; font-size: 17px; margin: 0; color: var(--chocolate); }
+        .product-desc { font-size: 12px; color: #8d6e63; margin-top: -3px; }
+        
+        /* PREÇO DESTACADO GOURMET */
+        .product-price-box { font-size: 19px; font-weight: 800; color: #2ecc71; background: var(--success-light); padding: 5px 10px; border-radius: 8px; display: inline-block; margin: 8px 0; }
+        
+        .btn-add-card { background: var(--chocolate); color: white; border: none; padding: 12px; border-radius: 12px; cursor: pointer; font-weight: bold; font-size: 14px; transition: 0.3s; margin-top: auto; }
+        .btn-add-card:hover { background: var(--chocolate-deep); }
+
+        /* CARRINHO E MODAL */
+        .cart-float-btn { position: fixed; bottom: 25px; right: 25px; background-color: var(--success); color: white; padding: 15px 30px; border-radius: 60px; box-shadow: 0 6px 20px rgba(0,0,0,0.22); display: flex; align-items: center; gap: 12px; cursor: pointer; z-index: 1000; font-weight: bold; border: none; font-size: 17px; transition: 0.3s; }
+        .cart-float-btn.hidden { transform: scale(0); pointer-events: none; }
+        .badge-count { background: white; color: var(--success); border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 900; }
+
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 2000; display: none; justify-content: center; align-items: center; padding: 20px; backdrop-filter: blur(5px); }
+        .modal-overlay.active { display: flex; }
+        .modal-box { background: white; width: 100%; max-width: 420px; border-radius: 30px; padding: 25px; max-height: 90vh; overflow-y: auto; position: relative; box-shadow: 0 15px 40px rgba(0,0,0,0.3); }
+        
+        .cart-item-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #eee; font-size: 15px; }
+        .checkout-total-box { font-size: 26px; font-weight: 800; color: var(--success); display: block; text-align: right; }
+        
+        /* INPUTS REFINADOS */
+        .checkout-input { width: 100%; padding: 15px 15px 15px 40px; border: 2px solid #eee; border-radius: 12px; margin-bottom: 12px; box-sizing: border-box; font-family: inherit; font-size: 15px; position: relative; }
+        .input-group { position: relative; }
+        .input-icon { position: absolute; left: 15px; top: 18px; color: #aaa; font-size: 16px; }
+
+        /* BOTÕES DE PAGAMENTO */
+        .pay-option { border: 2px solid #eee; padding: 15px; border-radius: 14px; cursor: pointer; font-weight: bold; margin-bottom: 10px; text-align: center; font-size: 15px; transition: 0.3s; color: #888; }
+        .pay-option.selected { border-color: var(--chocolate); background: #fdf5e6; color: var(--chocolate); }
+        .btn-finalizar { width: 100%; background: var(--success); color: white; border: none; padding: 18px; font-size: 18px; font-weight: bold; border-radius: 14px; cursor: pointer; margin-top: 15px; box-shadow: 0 5px 15px rgba(37, 211, 102, 0.3); }
+
+        .warning-box { background: #fff3cd; color: #856404; padding: 12px; border-radius: 12px; font-size: 13px; margin: 12px 0; border: 1px solid #ffeeba; }
+    </style>
 </head>
 <body>
 
-<header id="topo">Trufas maxwel 🍫</header>
+<header class="header-container">
+    <div class="header-banner"></div>
+    <div class="header-content">
+        <div class="avatar-box">
+            <img src="logo.jpg" alt="Maxwell" onerror="this.src='https://placehold.co/150x150?text=🍫'">
+        </div>
+        <h1 class="welcome-title">Trufas Maxwell</h1>
+        <div class="welcome-text">
+            <p>A verdadeira experiência do chocolate artesanal gourmet</p>
+            <p><b>Peça agora e surpreenda seu paladar!</b></p>
+        </div>
+    </div>
+    
+    <div class="tabs-container">
+        <button class="tab-btn active" id="btn-tradicionais" onclick="filtrar('TRADICIONAIS')">🍬 TRADICIONAIS</button>
+        <button class="tab-btn" id="btn-especiais" onclick="filtrar('ESPECIAIS')">💎 ESPECIAIS</button>
+        <button class="tab-btn" id="btn-cones" onclick="filtrar('CONES')">🍦 CONES</button>
+    </div>
+</header>
 
 <div class="container">
-    <div class="promo">
-        <b>🔥 PROMOÇÕES DO DIA:</b><br>
-        🍬 <b>Tradicionais:</b> 3 por <b>R$ 12,00</b><br>
-        💎 <b>Especiais/Cones:</b> 3 por <b>R$ 21,00</b><br>
+    <div class="promo-banner" id="banner-promo">
+        ✨ <b>PROMOÇÃO ESPECIAL DO DIA:</b> <br>
+        Tradicionais: 3 por R$ 12,00 | Especiais/Cones: 3 por R$ 21,00
+    </div>
+    <div class="product-grid" id="gridProdutos"></div>
+</div>
+
+<button id="floatingCart" class="cart-float-btn hidden" onclick="abrirModal()">
+    🛒 <span id="floatTotal">R$ 0,00</span>
+    <div class="badge-count" id="floatCount">0</div>
+</button>
+
+<div id="modalOverlay" class="modal-overlay">
+    <div class="modal-box">
+        <h2 style="font-family:'Caveat'; font-size:32px; margin-top:0; color:var(--chocolate)">Seu Pedido 📝</h2>
+        <div id="listaItensModal"></div>
         
+        <div style="text-align:right; margin: 20px 0;">
+            <div id="txtEconomia" style="color:#2ecc71; font-size:13px; font-weight:bold; margin-bottom:5px;"></div>
+            <span style="font-size:15px; color:#888;">Total:</span>
+            <div class="checkout-total-box" id="modalTotalValor">R$ 0,00</div>
+        </div>
+
+        <div style="font-weight:bold; font-size:15px; margin-bottom:12px; color:var(--chocolate)">Como quer pagar?</div>
+        <div class="pay-option" id="optPix" onclick="selecionarPagamento('pix')">💳 Pagar agora com Pix</div>
+        <div class="pay-option selected" id="optEntrega" onclick="selecionarPagamento('entrega')">💵 Pagar na Entrega</div>
+
+        <div style="font-weight:bold; font-size:15px; margin-bottom:12px; color:var(--chocolate)">Seus Dados</div>
+        <div class="input-group">
+            <span class="input-icon">👤</span>
+            <input type="text" id="nomeCliente" class="checkout-input" placeholder="Seu nome completo">
+        </div>
+        <div class="input-group">
+            <span class="input-icon">📍</span>
+            <input type="text" id="enderecoCliente" class="checkout-input" placeholder="Endereço completo (Rua, Nº, Bairro)">
+        </div>
+
+        <div id="area-pix" style="display:none; text-align:center; background:#f9f9f9; padding:15px; border-radius:15px; margin-top:10px; border:1px solid #eee;">
+            <div style="color:var(--pagbank-color); font-weight:bold; margin-bottom:10px;">Escaneie ou copie o Pix:</div>
+            <div id="img-qr-container" style="margin:10px auto; display:flex; justify-content:center;"></div>
+            <button onclick="copiarPix()" style="background:var(--secondary); border:none; padding:10px; border-radius:8px; cursor:pointer; font-weight:bold; width:100%; margin: 10px 0; background-color: var(--pagbank-color); color: white">📑 Copiar Código Pix</button>
+            <div class="warning-box">⚠️ Realize o pagamento pelo código acima e depois clique no botão abaixo para enviar o comprovante.</div>
+        </div>
+
+        <button class="btn-finalizar" id="btnZap" onclick="enviarZap()">Finalizar no WhatsApp 📲</button>
+        <button onclick="fecharModal()" style="background:none; border:none; color:#999; width:100%; margin-top:15px; cursor:pointer; font-weight:bold;">Continuar Comprando</button>
     </div>
-
-    <div class="nav-categories">
-        <a href="#tradicionais">🍬 Tradicionais</a>
-        <a href="#especiais">💎 Especiais</a>
-        <a href="#cones">🍦 Cones</a>
-    </div>
-
-    <h2 id="tradicionais">🍬 Trufas Tradicionais</h2>
-    <div class="grid" id="gridTradicionais"></div>
-
-    <h2 id="especiais">💎 Trufas Especiais</h2>
-    <div class="grid" id="gridEspeciais"></div>
-
-    <h2 id="cones">🍦 Cones Recheados</h2>
-    <div class="grid" id="gridCones"></div>
 </div>
-
-<div id="cartBtn" onclick="toggleCart()">
-    <span>🛒</span> 
-    <span>Carrinho (<span id='cartCount'>0</span>)</span>
-</div>
-
-<div id="cartBox">
-    <span class="close-cart" onclick="toggleCart()">×</span>
-    <h3 style="margin-top:0;">Seu Pedido</h3>
-    
-    <div id="cartItemsWrapper">
-        <div id="cartItems"></div>
-    </div>
-    
-    <div id="discountDisplay" class="discount-text"></div>
-    <div class="total">Total: R$ <span id="totalPrice">0.00</span></div>
-    
-    <input type="text" id="clienteNome" placeholder="Seu Nome" style="width:90%; padding:8px; margin:10px 0; border:1px solid #ccc; border-radius:5px;">
-
-    <button onclick="checkoutWhatsApp()" style="background:#25D366;">Finalizar no WhatsApp 📲</button>
-    <button onclick="limparCarrinho()" style="background:#dc3545; margin-top:10px; font-size:12px; padding:8px;">Esvaziar Carrinho 🗑️</button>
-</div>
-
-<footer>
-    © Desenvolvido por Marcos Paulo Otaviano — 2025<br>
-    <a href="https://wa.me/5535988440656" style="color:#666; text-decoration:none;">(35) 988440656</a>
-</footer>
 
 <script>
-const WHATSAPP_NUMBER = "5535991546016";
+    const WHATSAPP = "5535991546016";
+    const CHAVE_PIX = "5535988440656"; // Sua chave
+    const NOME_PIX = "TIA ANA SALGADOS"; // Seu nome no Pix (Maiúsculas)
+    const CIDADE_PIX = "GUAXUPE"; // Sua cidade (Maiúsculas)
 
-// --- CONFIGURAÇÃO DAS IMAGENS ---
-// Certifique-se de que as imagens estão na mesma pasta que este arquivo index.html
-const tradicionais = [
-    { nome: "Trufa de Morango 🍓", preco: 5, desc: "Clássica e cremosa", img: "trufa-morango.jpg" },
-    { nome: "Trufa de Maracujá 💛", preco: 5, desc: "Azedinho doce", img: "trufa-maracuja.jpg" },
-    { nome: "Trufa de Ninho 🥛", preco: 5, desc: "Ninho cremoso", img: "trufa-ninho.jpg" },
-    { nome: "Trufa de Brigadeiro 🍫", preco: 5, desc: "Chocolate puro", img: "trufa-brigadeiro.jpg" },
-    { nome: "Trufa de Coco 🥥", preco: 5, desc: "Prestígio delicioso", img: "trufa-coco.jpg" }
-];
+    // --- CONFIGURAÇÃO DAS IMAGENS ORIGINAIS RESTAURADA ---
+    const CATALOGO = {
+        "TRADICIONAIS": [
+            { nome: "Morango 🍓", preco: 5, img: "trufa-morango.jpg", desc: "Clássica" },
+            { nome: "Maracujá 💛", preco: 5, img: "trufa-maracuja.jpg", desc: "Azedinho" },
+            { nome: "Ninho 🥛", preco: 5, img: "trufa-ninho.jpg", desc: "Cremoso" },
+            { nome: "Brigadeiro 🍫", preco: 5, img: "trufa-brigadeiro.jpg", desc: "Puro chocolate" },
+            { nome: "Coco 🥥", preco: 5, img: "trufa-coco.jpg", desc: "Prestígio" }
+        ],
+        "ESPECIAIS": [
+            { nome: "Ninho c/ Morango", preco: 8, img: "esp-ninho-morango.jpg", desc: "Favorita" },
+            { nome: "Oreo Especial 🍪", preco: 8, img: "esp-oreo.jpg", desc: "Nutella e Oreo" },
+            { nome: "Dueto 🌗", preco: 8, img: "esp-dueto.jpg", desc: "Dois amores" },
+            { nome: "Dueto 🌗", preco: 8, img: "esp-dueto.jpg", desc: "Dois amores" },
+            { nome: "Ninho c/ Maracujá💛", preco: 8, img: "esp-ninho-maracuja.jpg", desc: "Explosão de sabor" },
+            { nome: "BrigadeiroMorango🍓", preco: 8, img: "esp-brigadeiro-morango.jpg", desc: "Sensação" },
+            { nome: "Oreo Especial 🍪", preco: 8, img: "esp-oreo.jpg", desc: "BrancoOreo Nutella" },
+            { nome: "Dueto 🌗", preco: 8, img: "esp-dueto.jpg", desc: "Dois amores" }
+        ],
+        "CONES": [
+            { nome: "Cone Morango", preco: 8, img: "cone-morango.jpg", desc: "Crocante" },
+            { nome: "Cone Brigadeiro", preco: 8, img: "cone-brigadeiro.jpg", desc: "Muito recheio" },
+            { nome: "Cone Morango 🍦", preco: 8, img: "cone-morango.jpg", desc: "ConeTrufadoCrocante" },
+            { nome: "Cone Maracujá🍦", preco: 8, img: "cone-maracuja.jpg", desc: "ConeTrufadoCrocante" },
+            { nome: "Cone Ninho 🍦", preco: 8, img: "cone-ninho.jpg", desc: "ConeTrufadoCrocante" },
+            { nome: "Cone Brigadeiro🍦", preco: 8, img: "cone-brigadeiro.jpg", desc: "ConeTrufadoCrocante" },
+            { nome: "Cone Coco 🍦", preco: 8, img: "cone-coco.jpg", desc: "ConeTrufadoCrocante" }
+        ]
+    };
 
-const especiais = [
-    { nome: "Ninho com Morango 🍓", preco: 8, desc: "Combinação perfeita", img: "esp-ninho-morango.jpg" },
-    { nome: "Ninho com Maracujá 💛", preco: 8, desc: "Explosão de sabor", img: "esp-ninho-maracuja.jpg" },
-    { nome: "Brigadeiro c/ Morango 🍫", preco: 8, desc: "Sensação", img: "esp-brigadeiro-morango.jpg" },
-    { nome: "Oreo Especial 🍪", preco: 8, desc: "Branco, Oreo e Nutella", img: "esp-oreo.jpg" },
-    { nome: "Dueto 🌗", preco: 8, desc: "Dois amores", img: "esp-dueto.jpg" }
-];
+    let carrinho = [];
+    let categoriaAtual = "TRADICIONAIS";
+    let metodoPagamento = "entrega";
 
-const cones = [
-    { nome: "Cone de Morango 🍦", preco: 8, desc: "Cone Trufado Crocante", img: "cone-morango.jpg" },
-    { nome: "Cone de Maracujá 🍦", preco: 8, desc: "Cone Trufado Crocante", img: "cone-maracuja.jpg" },
-    { nome: "Cone de Ninho 🍦", preco: 8, desc: "Cone Trufado Crocante", img: "cone-ninho.jpg" },
-    { nome: "Cone de Brigadeiro 🍦", preco: 8, desc: "Cone Trufado Crocante", img: "cone-brigadeiro.jpg" },
-    { nome: "Cone de Coco 🍦", preco: 8, desc: "Cone Trufado Crocante", img: "cone-coco.jpg" }
-];
-
-const todosProdutos = [...tradicionais, ...especiais, ...cones];
-let carrinho = [];
-
-if(localStorage.getItem('carrinhoRobertao')) {
-    try {
-        carrinho = JSON.parse(localStorage.getItem('carrinhoRobertao'));
-    } catch(e) {
-        localStorage.removeItem('carrinhoRobertao');
-    }
-}
-
-function renderCatalogo(){
-    const divTrad = document.getElementById("gridTradicionais");
-    const divEsp = document.getElementById("gridEspeciais");
-    const divCones = document.getElementById("gridCones");
-    
-    tradicionais.forEach((p, i) => { divTrad.innerHTML += criarCard(p, i); });
-    especiais.forEach((p, i) => { divEsp.innerHTML += criarCard(p, i + tradicionais.length); });
-    cones.forEach((p, i) => { divCones.innerHTML += criarCard(p, i + tradicionais.length + especiais.length); });
-    
-    updateCart();
-}
-
-function criarCard(p, index) {
-    return `
-        <div class='card'>
-            <div style="overflow:hidden; border-radius:15px 15px 0 0;">
-                <img src="${p.img}" class="card-img" alt="${p.nome}" 
-                onerror="this.src='https://placehold.co/300x200?text=Foto+Indisponível';">
-            </div>
-            <div class="card-body">
-                <div>
-                    <h3>${p.nome}</h3>
-                    <div class="desc">${p.desc}</div>
-                    <div class="price">R$ ${p.preco.toFixed(2)}</div>
+    function filtrar(cat) {
+        categoriaAtual = cat;
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById('btn-' + cat.toLowerCase()).classList.add('active');
+        
+        const grid = document.getElementById('gridProdutos');
+        grid.innerHTML = '';
+        
+        CATALOGO[cat].forEach((prod, index) => {
+            grid.innerHTML += `
+                <div class="product-card">
+                    <div class="product-img-container">
+                        <img src="${prod.img}" class="product-img" onerror="this.src='https://placehold.co/200x200?text=Trufa+Indisponível'">
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-title">${prod.nome}</h3>
+                        <div class="product-desc">${prod.desc}</div>
+                        <div><span class="product-price-box">R$ ${prod.preco.toFixed(2)}</span></div>
+                        <button class="btn-add-card" onclick="adicionar('${cat}', ${index})">Adicionar +</button>
+                    </div>
                 </div>
-                <button onclick='addToCart(${index})'>+ Adicionar</button>
+            `;
+        });
+    }
+
+    function adicionar(cat, idx) {
+        const p = CATALOGO[cat][idx];
+        const itemExistente = carrinho.find(c => c.nome === p.nome);
+        
+        if(itemExistente) {
+            itemExistente.qtd++;
+        } else {
+            carrinho.push({...p, qtd: 1, categoria: cat});
+        }
+        
+        atualizarUI();
+        
+        const btn = document.getElementById('floatingCart');
+        btn.style.transform = "scale(1.1)";
+        setTimeout(() => btn.style.transform = "scale(1)", 200);
+    }
+
+    function atualizarUI() {
+        let total = 0;
+        let economia = 0;
+        let count = 0;
+
+        const qtdTrad = carrinho.filter(i => i.categoria === "TRADICIONAIS").reduce((a,b) => a + b.qtd, 0);
+        const qtdEspCon = carrinho.filter(i => i.categoria !== "TRADICIONAIS").reduce((a,b) => a + b.qtd, 0);
+
+        const descTrad = Math.floor(qtdTrad / 3) * 3; // 3 set de 3 ganha 3 reias (normal seria 15, paga 12)
+        const descEsp = Math.floor(qtdEspCon / 3) * 3; // 3 set de 3 ganha 3 reias (normal seria 24, paga 21)
+
+        economia = descTrad + descEsp;
+
+        carrinho.forEach(i => {
+            total += (i.preco * i.qtd);
+            count += i.qtd;
+        });
+
+        const totalFinal = total - economia;
+
+        document.getElementById('floatTotal').innerText = "R$ " + totalFinal.toFixed(2);
+        document.getElementById('floatCount').innerText = count;
+        document.getElementById('floatingCart').classList.toggle('hidden', count === 0);
+        
+        // Modal
+        document.getElementById('modalTotalValor').innerText = "R$ " + totalFinal.toFixed(2);
+        document.getElementById('txtEconomia').innerText = economia > 0 ? `🎉 Você economizou R$ ${economia.toFixed(2)} nesta compra!` : "";
+        
+        const lista = document.getElementById('listaItensModal');
+        lista.innerHTML = carrinho.map((i, idx) => `
+            <div class="cart-item-row">
+                <span style="color:var(--chocolate); font-weight:bold;">${i.qtd}x ${i.nome}</span>
+                <span>R$ ${(i.preco * i.qtd).toFixed(2)} <b style="color:#dc3545; cursor:pointer; margin-left:10px" onclick="remover(${idx})">×</b></span>
             </div>
-        </div>
-    `;
-}
+        `).join('');
 
-function addToCart(index){
-    const produto = todosProdutos[index];
-    let item = carrinho.find(x => x.nome === produto.nome);
-    if (item) { item.qtd++; } else { carrinho.push({...produto, qtd: 1}); }
-    
-    updateCart();
-    
-    const btn = document.getElementById("cartBtn");
-    btn.style.transform = "scale(1.2)";
-    setTimeout(() => btn.style.transform = "scale(1)", 200);
-    
-    if(navigator.vibrate) navigator.vibrate(50);
-}
-
-function updateCart(){
-    const totalItens = carrinho.reduce((a, b) => a + b.qtd, 0);
-    document.getElementById("cartCount").innerText = totalItens;
-    
-    let itemsHTML = "";
-    let totalSemDesconto = 0;
-
-    carrinho.forEach((p, idx) => {
-        totalSemDesconto += p.preco * p.qtd;
-        itemsHTML += `
-            <div class='cart-item'>
-                <div class="cart-details">
-                    <b>${p.nome}</b><br>
-                    <small>R$${p.preco.toFixed(2)} cada</small>
-                </div>
-                <div>
-                    <input type='number' min='1' value='${p.qtd}' onchange='changeQty(${idx}, this.value)'>
-                </div>
-            </div>
-        `;
-    });
-
-    const qtd5 = carrinho.filter(p => p.preco === 5).reduce((acc, item) => acc + item.qtd, 0);
-    const desconto5 = Math.floor(qtd5 / 3) * 3.00;
-
-    const qtd8 = carrinho.filter(p => p.preco === 8).reduce((acc, item) => acc + item.qtd, 0);
-    const desconto8 = Math.floor(qtd8 / 3) * 3.00;
-
-    const totalDesconto = desconto5 + desconto8;
-    const totalFinal = totalSemDesconto - totalDesconto;
-
-    document.getElementById("cartItems").innerHTML = itemsHTML || "<p style='text-align:center;color:#999'>Seu carrinho está vazio.</p>";
-    document.getElementById("totalPrice").innerText = totalFinal.toFixed(2);
-    
-    if(totalDesconto > 0) {
-        document.getElementById("discountDisplay").innerHTML = `🎉 Economia: - R$ ${totalDesconto.toFixed(2)}`;
-    } else {
-        document.getElementById("discountDisplay").innerHTML = "";
+        if(metodoPagamento === 'pix') gerarPix(totalFinal);
     }
 
-    localStorage.setItem('carrinhoRobertao', JSON.stringify(carrinho));
-}
-
-function changeQty(idx, val){ 
-    const newQty = parseInt(val);
-    if(isNaN(newQty) || newQty < 1) {
-        if(confirm("Remover item do carrinho?")) { carrinho.splice(idx, 1); }
-    } else { 
-        carrinho[idx].qtd = newQty; 
+    function remover(idx) {
+        carrinho.splice(idx, 1);
+        atualizarUI();
     }
-    updateCart();
-}
 
-function toggleCart(){
-    const box = document.getElementById("cartBox");
-    box.style.display = (box.style.display === "flex" ? "none" : "flex");
-}
-
-function checkoutWhatsApp(){
-    if(carrinho.length === 0) return alert("Seu carrinho está vazio!");
-    
-    const nome = document.getElementById("clienteNome").value || "Cliente";
-    
-    let msg = `*OLÁ! PEDIDO DE ${nome.toUpperCase()}*%0A%0A`;
-    carrinho.forEach(p => { msg += `▪️ ${p.qtd}x ${p.nome}%0A`; });
-    
-    const total = document.getElementById("totalPrice").innerText;
-    const descontoTxt = document.getElementById("discountDisplay").innerText;
-    
-    msg += `%0A--------------------%0A`;
-    if(descontoTxt) { msg += `✅ Promoção aplicada!%0A`; }
-    msg += `💰 *TOTAL: R$ ${total}*%0A`;
-    msg += `%0A--------------------%0A`;
-    msg += `📍 *Aguardo a confirmação e chave PIX.*`;
-    
-    window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`, "_blank");
-}
-/*esvazia meu carrinho */ 
-function limparCarrinho() {
-    if (carrinho.length > 0 && confirm("Deseja realmente esvaziar o carrinho?")) {
-        carrinho = [];
-        updateCart();
-        toggleCart();
+    function selecionarPagamento(tipo) {
+        metodoPagamento = tipo;
+        document.getElementById('optPix').classList.toggle('selected', tipo === 'pix');
+        document.getElementById('optEntrega').classList.toggle('selected', tipo === 'entrega');
+        document.getElementById('area-pix').style.display = tipo === 'pix' ? 'block' : 'none';
+        document.getElementById('btnZap').innerText = tipo === 'pix' ? 'JÁ PAGUEI! Enviar Pedido ✅' : 'Finalizar no WhatsApp 📲';
+        atualizarUI();
     }
-}
 
-renderCatalogo();
+    function abrirModal() { document.getElementById('modalOverlay').classList.add('active'); }
+    function fecharModal() { document.getElementById('modalOverlay').classList.remove('active'); }
+
+    function enviarZap() {
+        const nome = document.getElementById('nomeCliente').value.trim();
+        const end = document.getElementById('enderecoCliente').value.trim();
+        if(!nome || !end) return alert("Por favor, preencha seu nome e o endereço de entrega!");
+
+        let texto = `*PEDIDO - TRUFAS MAXWELL* 🍫%0A%0A`;
+        texto += `👤 *Cliente:* ${nome}%0A`;
+        texto += `📍 *Endereço:* ${end}%0A`;
+        texto += `💳 *Pagamento:* ${metodoPagamento.toUpperCase()}%0A%0A`;
+        texto += `*ITENS:*%0A`;
+        carrinho.forEach(i => { texto += `▪️ ${i.qtd}x ${i.nome}%0A`; });
+        const economia = document.getElementById('txtEconomia').innerText;
+        if(economia) texto += `%0A🎉 *ECONOMIA:* ${economia}%0A`;
+        texto += `💰 *TOTAL: ${document.getElementById('modalTotalValor').innerText}*`;
+
+        window.open(`https://wa.me/${WHATSAPP}?text=${texto}`, '_blank');
+        fecharModal();
+    }
+
+    // --- FUNÇÕES TÉCNICAS PIX (IGUAL TIA ANA) ---
+    function gerarPix(valor) {
+        const container = document.getElementById('img-qr-container');
+        container.innerHTML = "";
+        
+        if (valor <= 0) return;
+
+        const payload = `00020101021126580014BR.GOV.BCB.PIX0114${CHAVE_PIX}52040000530398654${valor.toFixed(2).length < 10 ? '0'+valor.toFixed(2).length : valor.toFixed(2).length}${valor.toFixed(2)}5802BR59${NOME_PIX.length < 10 ? '0'+NOME_PIX.length : NOME_PIX.length}${NOME_PIX}60${CIDADE_PIX.length < 10 ? '0'+CIDADE_PIX.length : CIDADE_PIX.length}${CIDADE_PIX}62070503***6304`;
+        
+        new QRCode(container, { text: payload, width: 160, height: 160 });
+        container.dataset.payload = payload;
+    }
+
+    function copiarPix() {
+        const payload = document.getElementById('img-qr-container').dataset.payload;
+        if (payload) {
+            navigator.clipboard.writeText(payload);
+            alert("Código Pix Copia e Cola copiado com sucesso! Abra o app do seu banco.");
+        }
+    }
+
+    filtrar('TRADICIONAIS');
 </script>
-
 </body>
-
 </html>
-
